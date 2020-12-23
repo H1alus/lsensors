@@ -8,16 +8,16 @@ $ git clone https://github.com/Vittorio Folino/lsensors.git
 $ cd lsensors
 ``` 
 make sure you have make, gcc and python3 installed.  
-Download the lm_sensors-devel package: 
+Download the lm_sensors-devel ad lm_sensors packages: 
 
 <b>Fedora or any RHEL based distro:</b>  
 ```bash
-$ sudo dnf install lm_sensors-devel
+$ sudo dnf install lm_sensors-devel lm_sensors
 ```
 
 <b>Debian/Ubuntu based distro:</b>
 ```bash
-$ sudo apt install lm_sensors-devel
+$ sudo apt install lm_sensors-devel lm_sensors
 ```
 Now do in the root dir of the project:
 ```bash
