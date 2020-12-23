@@ -1,0 +1,7 @@
+.venv/
+.vscode/
+sens_obj/
+bin/
+log/
+lib/__pycache__
+etc/settings.json

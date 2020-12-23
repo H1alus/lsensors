@@ -1,0 +1,65 @@
+#!/usr/bin/python3
+
+#    Copyright (c) 2020 Vittorio Folino 
+#
+#    This file is part of lsensors.
+# 
+#    lsensors is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    lsensors is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with lsensors.  If not, see <http://www.gnu.org/licenses/>.
+
+from lib import settings
+from lib import sens
+import os
+import sys
+import signal
+
+
+
+absRoot =  os.path.dirname(os.path.abspath(__file__))
+helpMsg = os.path.join(absRoot, 'etc/help.txt')
+keyPrint = '-p'
+keyHelp = '--help'
+keyCreate = '-i'
+
+def signal_handler(sig, frame):
+    print('\nCTRL+C, exiting...')
+    sys.exit(0)
+
+def main():
+    signal.signal(signal.SIGINT, signal_handler)
+    #getting initial settings, might be defaults
+    sets = settings.Settings(absRoot)
+    setted = sets.getSettings()
+    #Sensors class updates the settings giving back
+    #the list of sensors if not found in defaults
+    sensors = sens.Sensors(absRoot, setted)
+    setted = sensors.settings
+    #updating and saving
+    sets.update(setted)
+    sets.save()
+    #deciding what to do
+    if len(sys.argv) == 2:
+        if keyPrint in sys.argv:
+            sensors.printAll()
+
+        elif keyHelp in sys.argv:
+            with open(helpMsg, 'r') as hlp:
+                print(hlp.read())
+
+        elif keyCreate in sys.argv:
+            print('created settings file in etc/settings.json')
+    elif len(sys.argv) == 1: 
+        sensors.logAll()
+
+if __name__ == "__main__":
+    main()

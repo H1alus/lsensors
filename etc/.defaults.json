@@ -1,0 +1,7 @@
+{
+	"logFolder" : ".",
+	"samplingTime": 2,
+	"startUpReset": true,
+	"sensorsList": [],
+	"sensors": {}
+}

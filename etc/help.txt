@@ -1,0 +1,14 @@
+lsensors:
+This program uses lm_sensors to log the temps of the PC's sensors:
+
+USAGE: lsensors <options>
+
+options:
+    --help prints this
+    -p for printing on stdout
+    no arguments print on given log 
+    
+**default log folder is your working dir
+**you can tweak the program as you want in the settings.json file
+**change true the value of each sensor you want to log/print
+IMPORTANT: DO NOT TOUCH .defaults.json in the etc/ folder
