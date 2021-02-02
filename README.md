@@ -21,7 +21,9 @@ $ sudo apt install lm_sensors-devel lm_sensors
 ```  
 
 <b> Arch based distro:</b>  
-all packages are already given
+```bash
+$ sudo pacman -S lm_sensors
+```  
 
 Now do in the root dir of the project:
 ```bash
