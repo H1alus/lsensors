@@ -4,7 +4,7 @@
 ## Install
 Clone the repository of the project. And move inside it:
 ```bash
-$ git clone https://github.com/Vittorio Folino/lsensors.git
+$ git clone https://github.com/H1alus/lsensors.git
 $ cd lsensors
 ``` 
 make sure you have make, gcc and python3 installed.  
