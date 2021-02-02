@@ -20,7 +20,7 @@ $ sudo dnf install lm_sensors-devel lm_sensors
 $ sudo apt install lm_sensors-devel lm_sensors
 ```  
 
-<b> Arch based distro:</b>
+<b> Arch based distro:</b>  
 all packages are already given
 
 Now do in the root dir of the project:
