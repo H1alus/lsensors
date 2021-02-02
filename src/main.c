@@ -23,7 +23,7 @@
 
 int main(int argc, char *argv[]) {
     //setting output buffer:
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "en-US");
     //telling to miniLogger to write on file (applog)
     writeOnText = 1;
     //initing sensors:
