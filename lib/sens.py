@@ -136,9 +136,9 @@ class Sensors:
             while True:
                 fp.write(BOUNDING + '\n')
                 fp.write(str(getTime()) + '\n')
+                n_values += 1
                 for sensor in gens.keys():
                     value = next(gens[sensor])
-                    n_values += 1
                     if sensor not in self.minValues.keys():
                         self.minValues[sensor] = value
                         self.avgValues[sensor] = value
