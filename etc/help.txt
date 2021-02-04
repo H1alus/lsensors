@@ -4,9 +4,9 @@ This program uses lm_sensors to log the temps of the PC's sensors:
 USAGE: lsensors <options>
 
 options:
-    --help prints this
-    -p for printing on stdout
-    no arguments print on given log 
+    --help or -i prints this
+    --print or -p for printing on stdout
+    --log or -l writes on a log file
     
 **default log folder is your working dir
 **you can tweak the program as you want in the settings.json file
