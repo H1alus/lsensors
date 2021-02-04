@@ -17,7 +17,7 @@ $ sudo dnf install lm_sensors-devel lm_sensors
 
 <b>Debian/Ubuntu based distro:</b>
 ```bash
-$ sudo apt install lm_sensors-devel lm_sensors
+$ sudo apt install libsensors-dev lm-sensors
 ```  
 
 <b> Arch based distro:</b>  
