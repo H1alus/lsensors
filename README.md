@@ -54,13 +54,17 @@ Show help message:
 ```bash
 $ lsensors --help
 ```
+Log on a file in the working dir, called "thermals.log":
+```bash
+$ lsensors -l
+```
 Print to stdout:
 ```bash
 $ lsensors -p
 ```
-Generate settings.json file:
+Generate settings.json file and show help message:
 ```bash
-$ lsensors -i
+$ lsensors
 ```
 ## LICENSE
 This code is distributed under the GNU General Public License V3, for further more information, check the LICENSE file.
