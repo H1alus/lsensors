@@ -153,7 +153,7 @@ class Sensors:
                     fp.write('min: ' + str(round(self.minValues[sensor], 1)) + ' °C\t')
                     fp.write('avg: ' + str(round(self.avgValues[sensor]/n_values, 1)) + ' °C\t')
                     fp.write('max: ' + str(round(self.maxValues[sensor], 1)) + ' °C\n\n')
-                fp.write(BOUNDING)
+                fp.write(BOUNDING + '\n')
                 time.sleep(self.samplingTime)
     
         except (KeyboardInterrupt, SystemExit):
