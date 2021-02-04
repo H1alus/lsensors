@@ -34,9 +34,9 @@ Make sure "lsensors" file has exec permission:
 ```bash
 $ sudo chmod +x lsensors
 ```
-Run this to configure the settings.json file: 
+Run this to let lsensors configure the settings.json file: 
 ```bash
-$ ./lsensors -i
+$ ./lsensors
 ```
 If you wish add the program to PATH.  
 For example copy the project directory in /opt and add to your .bashrc:
@@ -68,3 +68,6 @@ This code is distributed under the GNU General Public License V3, for further mo
 ## Notes
 You can run lsensors as a daemon.  
 This was made by myself in a short period of time. There's some stuff I'd like to change in the future but for the mean time it's working with no much cpu or memory usage and that's what matters for me.
+
+## TO DO
+* Recognize measurement unit for each type of subfeature

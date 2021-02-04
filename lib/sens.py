@@ -16,11 +16,13 @@
 #    along with lsensors.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import json
 import time
 from datetime import datetime
+import curses
 
-PRINT_BOUND = 60
+BOUNDING = '-------------------------------------------------------------------------------'
 
 def getTime():
     now = datetime.now()
@@ -33,6 +35,9 @@ class Sensors:
         sensBin = os.path.join('bin', 'sens')
         self.sens = os.path.join(wd, sensBin)
 
+        self.avgValues = dict()
+        self.minValues = dict()
+        self.maxValues = dict()
         self.settings = settings
         self.samplingTime = settings["samplingTime"]
         if len(self.settings["sensorsList"]) == 0:
@@ -78,7 +83,7 @@ class Sensors:
             for feature in self.sensors[sensor].keys():
                 for subfeat in self.sensors[sensor][feature].keys():
                     if self.sensors[sensor][feature][subfeat]:
-                        key = sensor + ' ' + feature + ' ' + subfeat + ':\t'
+                        key = sensor + ' ' + feature + ' ' + subfeat
                         gens[key] = self.__genValue(sensor, feature, subfeat)
         return gens
     
@@ -89,28 +94,67 @@ class Sensors:
             time.sleep(self.samplingTime)
     
     def printAll(self):
+        n_values = 0
         gens = self.getGens()
-        while True:
-            [print('-', end='') for i in range(0, PRINT_BOUND)]
-            print()
-            for sensor in gens.keys():
-                print(sensor, next(gens[sensor]), ' °C')
-            [print('-', end='') for i in range(0, PRINT_BOUND)]
-            print()
-            time.sleep(self.samplingTime)
+        screen = curses.initscr()
+        curses.curs_set(0)
+    
+        try:
+            while True:
+                row = 0
+                n_values += 1
+                for sensor in gens.keys():
+                    
+                    value = next(gens[sensor])
+                    if sensor not in self.minValues.keys():
+                        self.minValues[sensor] = value
+                        self.avgValues[sensor] = value
+                        self.maxValues[sensor] = value
+                    else:
+                        self.minValues[sensor] = min(value, self.minValues[sensor])
+                        self.avgValues[sensor] += value
+                        self.maxValues[sensor] = max(value, self.maxValues[sensor])
+                    screen.addstr(row, 0, sensor)
+                    screen.addstr(row + 1, 0, 'value: ' + str(round(value, 1)) + ' °C')
+                    screen.addstr(row + 1, 20, 'min: ' + str(round(self.minValues[sensor], 1)) + ' °C')
+                    screen.addstr(row + 1, 40, 'avg: ' + str(round(self.avgValues[sensor]/n_values, 1)) + ' °C')
+                    screen.addstr(row + 1, 60, 'max: ' + str(round(self.maxValues[sensor], 1)) + ' °C')
+                    screen.refresh()
+                    row += 3
+                curses.napms(self.samplingTime * 1000)
+
+        except (KeyboardInterrupt, SystemExit):
+            curses.endwin()
     
     def logAll(self):
+        n_values = 0
         logFolder = self.settings["logFolder"]
         filePath = os.path.join(logFolder, 'thermals.log')
         gens = self.getGens()
-        while True:
-            fp = open(filePath, 'a')
-            [fp.write('-') for i in range(0, PRINT_BOUND)]
-            fp.write('\n')
-            fp.write(str(getTime()) + '\n')
-            for sensor in gens.keys():
-                fp.write(sensor + str(next(gens[sensor])) + '\t°C'+'\n')
-            [fp.write('-') for i in range(0, PRINT_BOUND)]
-            fp.write('\n')
-            time.sleep(self.samplingTime)
+        fp = open(filePath, 'a')
+        try:
+            while True:
+                fp.write(BOUNDING + '\n')
+                fp.write(str(getTime()) + '\n')
+                for sensor in gens.keys():
+                    value = next(gens[sensor])
+                    n_values += 1
+                    if sensor not in self.minValues.keys():
+                        self.minValues[sensor] = value
+                        self.avgValues[sensor] = value
+                        self.maxValues[sensor] = value
+                    else:
+                        self.minValues[sensor] = min(value, self.minValues[sensor])
+                        self.avgValues[sensor] += value
+                        self.maxValues[sensor] = max(value, self.maxValues[sensor])
+
+                    fp.write(sensor + '\n')
+                    fp.write('value: ' + str(round(value, 1)) + ' °C\t')
+                    fp.write('min: ' + str(round(self.minValues[sensor], 1)) + ' °C\t')
+                    fp.write('avg: ' + str(round(self.avgValues[sensor]/n_values, 1)) + ' °C\t')
+                    fp.write('max: ' + str(round(self.maxValues[sensor], 1)) + ' °C\n\n')
+                fp.write(BOUNDING)
+                time.sleep(self.samplingTime)
+    
+        except (KeyboardInterrupt, SystemExit):
             fp.close()

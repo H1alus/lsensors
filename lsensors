@@ -21,22 +21,15 @@ from lib import settings
 from lib import sens
 import os
 import sys
-import signal
-
-
 
 absRoot =  os.path.dirname(os.path.abspath(__file__))
 helpMsg = os.path.join(absRoot, 'etc/help.txt')
-keyPrint = '-p'
-keyHelp = '--help'
-keyCreate = '-i'
 
-def signal_handler(sig, frame):
-    print('\nCTRL+C, exiting...')
-    sys.exit(0)
+def showHlp():
+    with open(helpMsg, 'r') as hlp:
+        print(hlp.read())
 
 def main():
-    signal.signal(signal.SIGINT, signal_handler)
     #getting initial settings, might be defaults
     sets = settings.Settings(absRoot)
     setted = sets.getSettings()
@@ -47,19 +40,23 @@ def main():
     #updating and saving
     sets.update(setted)
     sets.save()
-    #deciding what to do
+
+    keyDictionary = {
+        #flags to log on file in working dir
+        '-l' : sensors.logAll,
+        '--log' : sensors.logAll,
+        #flags to print on print on console
+        '-p' : sensors.printAll,
+        '--print' : sensors.printAll,
+        #flags to print help message
+        '-h' : showHlp,
+        '--help' : showHlp
+    }
+
     if len(sys.argv) == 2:
-        if keyPrint in sys.argv:
-            sensors.printAll()
-
-        elif keyHelp in sys.argv:
-            with open(helpMsg, 'r') as hlp:
-                print(hlp.read())
-
-        elif keyCreate in sys.argv:
-            print('created settings file in etc/settings.json')
-    elif len(sys.argv) == 1: 
-        sensors.logAll()
+        keyDictionary[sys.argv[1]]()
+    else:
+        showHlp()
 
 if __name__ == "__main__":
     main()
