@@ -53,7 +53,7 @@ def main():
         '--help' : showHlp
     }
 
-    if len(sys.argv) == 2:
+    if len(sys.argv) == 2 and sys.argv[1] in keyDictionary.keys():
         keyDictionary[sys.argv[1]]()
     else:
         showHlp()
